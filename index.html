@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>digital analog clock</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<style>
+			* {
+				font-size: 2rem;
+				font-family: cursive, sans;
+			}
+			.container {
+				width: 1000px;
+				height: 1000px;
+				position: relative;
+				background-color: #eee;
+				border: 5px solid black;
+				border-radius: 2rem;
+			}
+			body {
+				width: 100vw;
+				height: 100vh;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin: 0;
+				padding: 0;
+			}
+			.h,
+			.min,
+			.sec {
+				text-align: center;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+			}
+			.h-holder,
+			.sec-holder,
+			.min-holder {
+				height: 50%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: end;
+				margin: -0.8rem;
+			}
+			.h-letter,
+			.min-letter,
+			.sec-letter {
+				text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+			}
+		</style>
+	</head>
+	<body>
+		<h2>Analog Digital Clock</h2>
+		<div class="container">
+			<div class="h">
+				<div class="h-holder">
+					<div class="h-letter">{{hour}}</div>
+					<div class="h-letter">{{hour}}</div>
+					<div class="h-letter">{{hour}}</div>
+				</div>
+			</div>
+			<div class="min">
+				<div class="min-holder">
+					<div class="min-letter">{{minute}}</div>
+					<div class="min-letter">{{minute}}</div>
+					<div class="min-letter">{{minute}}</div>
+					<div class="min-letter">{{minute}}</div>
+				</div>
+			</div>
+			<div class="sec">
+				<div class="sec-holder">
+					<div class="sec-letter">{{secound}}</div>
+					<div class="sec-letter">{{secound}}</div>
+					<div class="sec-letter">{{secound}}</div>
+					<div class="sec-letter">{{secound}}</div>
+					<div class="sec-letter">{{secound}}</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						date: null,
+						hour: 0,
+						minute: 0,
+						secound: 0,
+					};
+				},
+				mounted() {
+					this.date = new Date();
+					this.updateTime();
+					setInterval(() => {
+						this.date = new Date();
+						this.updateTime();
+					}, 1000);
+				},
+				methods: {
+					updateTime() {
+						this.hour = this.date.getHours();
+						this.minute = this.date.getMinutes();
+						this.secound = this.date.getSeconds();
+						console.log(this.hour, this.minute, this.secound);
+						this.setHours((this.hour * 360) / 12);
+						this.setMinutes((this.minute * 360) / 60);
+						this.setSeconds((this.secound * 360) / 60);
+					},
+					setSeconds(value) {
+						let secbox = document.querySelector(".sec");
+						let secletters = document.querySelectorAll(".sec-letter");
+						secbox.style.transform = "rotate(" + value + "deg)";
+						secletters.forEach((letter) => {
+							letter.style.transform = "rotate(-" + value + "deg)";
+						});
+					},
+					setMinutes(value) {
+						let minbox = document.querySelector(".min");
+						let minletters = document.querySelectorAll(".min-letter");
+						minbox.style.transform = "rotate(" + value + "deg)";
+						minletters.forEach((letter) => {
+							letter.style.transform = "rotate(-" + value + "deg)";
+						});
+					},
+					setHours(value) {
+						let hbox = document.querySelector(".h");
+						let hletters = document.querySelectorAll(".h-letter");
+						hbox.style.transform = "rotate(" + value + "deg)";
+						hletters.forEach((letter) => {
+							letter.style.transform = "rotate(-" + value + "deg)";
+						});
+					},
+				},
+			}).mount(".container");
+		</script>
+	</body>
+</html>
